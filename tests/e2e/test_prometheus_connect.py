@@ -4,7 +4,13 @@ Test module for class PrometheusConnect
 import unittest
 import os
 from datetime import datetime, timedelta
+
+import pytest
+
 from prometheus_api_client import MetricsList, PrometheusConnect
+
+
+pytestmark = pytest.mark.e2e
 
 
 class TestPrometheusConnect(unittest.TestCase):
