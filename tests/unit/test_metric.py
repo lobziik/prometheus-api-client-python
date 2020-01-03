@@ -11,10 +11,10 @@ class TestMetric(unittest.TestCase):
 
     def setUp(self):
         """
-        read metrics stored as jsons in './tests/metrics'
+        read metrics stored as jsons in './tests/data/metrics'
         """
         self.raw_metrics_list = list()
-        for (dir_path, _, file_names) in os.walk("./tests/metrics"):
+        for (dir_path, _, file_names) in os.walk("./tests/data/metrics"):
             self.raw_metrics_list.extend(
                 [json.load(open(os.path.join(dir_path, file))) for file in file_names]
             )
