@@ -17,7 +17,6 @@ def test_network_blocked():
 
 
 class TestPrometheusConnect:
-
     @pytest.fixture(autouse=True)
     def setup(self):
         self.pc = PrometheusConnect(url="http://mocked-host.org")
@@ -33,4 +32,4 @@ class TestPrometheusConnect:
             assert len(self.pc.all_metrics())
             assert handler.call_count == 1
             request = handler.requests[0]
-            assert request.path_url == '/api/v1/label/__name__/values'
+            assert request.path_url == "/api/v1/label/__name__/values"
