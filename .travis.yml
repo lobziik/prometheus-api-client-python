@@ -1,6 +1,4 @@
 language: python
-python:
-  - 3.6
 matrix:
   fast_finish: true
   include:
@@ -10,9 +8,4 @@ matrix:
       env: TOX_ENV=unit-py37
 
 install:
-  - if [ "$TOX_ENV" ]; then travis_retry pip install "virtualenv<14.0.0" tox; fi
-
-script:
-  - if [ "$TOX_ENV" ]; then tox -e $TOX_ENV; fi
-after_success:
-  - codecov
+  - pip instal tox
