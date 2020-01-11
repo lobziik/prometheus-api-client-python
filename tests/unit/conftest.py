@@ -1,3 +1,6 @@
+import os
+import json
+from pathlib import Path
 from urllib.parse import urlparse
 
 import pytest
@@ -10,12 +13,16 @@ def mock_response(
 ):
     """Universal handler for specify mocks inplace"""
     if func is None:
+
         def mocked(url, request):
-            mock = response(status_code=status_code, content=content, request=request, headers=headers)
+            mock = response(
+                status_code=status_code, content=content, request=request, headers=headers
+            )
             if cookies:
                 mock.cookies = cookies
             mock.url = response_url if response_url else url
             return mock
+
     else:
         mocked = func
 
@@ -47,7 +54,12 @@ class ResponseMock(HTTMock):
         super().__init__(handler)
 
 
-@pytest.fixture(scope='module', autouse=True)
+@pytest.fixture
+def mocked_response():
+    return ResponseMock
+
+
+@pytest.fixture(scope="module", autouse=True)
 def block_network():
     """
     Block all network connections for unittests
@@ -57,6 +69,19 @@ def block_network():
         yield
 
 
-@pytest.fixture
-def mocked_response():
-    return ResponseMock
+@pytest.fixture(scope="module")
+def data_path():
+    return str(Path(os.path.dirname(__file__)) / "data")
+
+
+@pytest.fixture(scope="module")
+def raw_metrics(data_path):
+    raw_metrics_list = list()
+    for (dir_path, _, file_names) in os.walk(data_path):
+        # file_names.reverse()  # dunno why, but os.walk returns files in reversed order
+        raw_metrics_list.extend(
+            [json.load(open(os.path.join(dir_path, file))) for file in file_names]
+        )
+    assert len(raw_metrics_list), "Seems no test data found"
+    assert len(raw_metrics_list) == 8
+    return raw_metrics_list

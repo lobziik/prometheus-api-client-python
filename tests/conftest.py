@@ -1,4 +1,3 @@
-
 MARKERS = [
     "e2e: tests that communicates with external services, such as Prometheus",
 ]
