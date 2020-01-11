@@ -8,4 +8,4 @@ matrix:
       env: TOX_ENV=unit-py37
 
 install:
-  - pip instal tox
+  - pip install tox
