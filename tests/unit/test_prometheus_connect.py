@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 import pytest
 import requests
 
@@ -33,3 +35,21 @@ class TestPrometheusConnect:
             assert handler.call_count == 1
             request = handler.requests[0]
             assert request.path_url == "/api/v1/label/__name__/values"
+
+    def test_get_metric_range_data_with_incorrect_input_types(self):
+        start_time = datetime.now() - timedelta(minutes=20)
+        chunk_size = timedelta(minutes=7)
+        end_time = datetime.now() - timedelta(minutes=10)
+
+        with pytest.raises(TypeError):
+            self.pc.get_metric_range_data(
+                metric_name="up", start_time="20m", end_time=end_time, chunk_size=chunk_size
+            )
+        with pytest.raises(TypeError):
+            self.pc.get_metric_range_data(
+                metric_name="up", start_time=start_time, end_time="10m", chunk_size=chunk_size
+            )
+        with pytest.raises(TypeError):
+            self.pc.get_metric_range_data(
+                metric_name="up", start_time=start_time, end_time=end_time, chunk_size="10m"
+            )
