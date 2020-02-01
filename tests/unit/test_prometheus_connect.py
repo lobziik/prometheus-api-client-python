@@ -29,6 +29,27 @@ class TestPrometheusConnect:
                 self.pc.all_metrics()
         assert "HTTP Status Code 403 (b'Unauthorized')" in str(exc)
 
+    def test_broken_responses(self):
+        with pytest.raises(PrometheusApiClientException) as exc:
+            self.pc.all_metrics()
+        assert "HTTP Status Code 403 (b'BOOM!')" in str(exc)
+
+        with pytest.raises(PrometheusApiClientException) as exc:
+            self.pc.get_current_metric_value("metric")
+        assert "HTTP Status Code 403 (b'BOOM!')" in str(exc)
+
+        with pytest.raises(PrometheusApiClientException) as exc:
+            self.pc.get_metric_range_data("metric")
+        assert "HTTP Status Code 403 (b'BOOM!')" in str(exc)
+
+        with pytest.raises(PrometheusApiClientException) as exc:
+            self.pc.custom_query_range("query", datetime.now(), datetime.now(), "1")
+        assert "HTTP Status Code 403 (b'BOOM!')" in str(exc)
+
+        with pytest.raises(PrometheusApiClientException) as exc:
+            self.pc.custom_query("query")
+        assert "HTTP Status Code 403 (b'BOOM!')" in str(exc)
+
     def test_all_metrics(self, mocked_response):
         with mocked_response(ALL_METRICS) as handler:
             assert len(self.pc.all_metrics())
