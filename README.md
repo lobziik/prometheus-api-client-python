@@ -12,6 +12,18 @@ To install directly from this branch:
 
 `pip install https://github.com/AICoE/prometheus-api-client-python/zipball/master`
 
+## Development
+Fork and clone repo.
+
+Install needed dependencies:
+`pip install -e '.[dev]'`
+
+For run tests and lint:
+`tox`
+ 
+ For run tests only:
+ `pytest -m 'not e2e'`
+
 ## Documentation
 
 Docs: [https://prometheus-api-client-python.readthedocs.io/source/prometheus_api_client.html]
